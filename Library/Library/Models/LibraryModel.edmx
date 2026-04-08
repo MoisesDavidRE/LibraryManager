@@ -1,0 +1,1140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="LibraryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Autor">
+          <Key>
+            <PropertyRef Name="id_autor" />
+          </Key>
+          <Property Name="id_autor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="id_cliente" />
+          </Key>
+          <Property Name="id_cliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="100" />
+          <Property Name="telefono" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Copia">
+          <Key>
+            <PropertyRef Name="id_copia" />
+          </Key>
+          <Property Name="id_copia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_libro" Type="int" />
+          <Property Name="tipo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="precio" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Detalle_Venta">
+          <Key>
+            <PropertyRef Name="id_detalle" />
+          </Key>
+          <Property Name="id_detalle" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_venta" Type="int" />
+          <Property Name="id_copia" Type="int" />
+          <Property Name="precio_unitario" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Libro">
+          <Key>
+            <PropertyRef Name="id_libro" />
+          </Key>
+          <Property Name="id_libro" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="titulo" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="id_autor" Type="int" />
+          <Property Name="isbn" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Prestamo">
+          <Key>
+            <PropertyRef Name="id_prestamo" />
+          </Key>
+          <Property Name="id_prestamo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_cliente" Type="int" />
+          <Property Name="id_copia" Type="int" />
+          <Property Name="fecha_prestamo" Type="datetime" />
+          <Property Name="fecha_limite" Type="datetime" Nullable="false" />
+          <Property Name="fecha_devolucion" Type="datetime" />
+          <Property Name="estado" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="id_venta" />
+          </Key>
+          <Property Name="id_venta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_cliente" Type="int" />
+          <Property Name="fecha_venta" Type="datetime" />
+          <Property Name="total" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <Association Name="FK__Copia__id_libro__628FA481">
+          <End Role="Libro" Type="Self.Libro" Multiplicity="0..1" />
+          <End Role="Copia" Type="Self.Copia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Libro">
+              <PropertyRef Name="id_libro" />
+            </Principal>
+            <Dependent Role="Copia">
+              <PropertyRef Name="id_libro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Detalle_V__id_co__6D0D32F4">
+          <End Role="Copia" Type="Self.Copia" Multiplicity="0..1" />
+          <End Role="Detalle_Venta" Type="Self.Detalle_Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Copia">
+              <PropertyRef Name="id_copia" />
+            </Principal>
+            <Dependent Role="Detalle_Venta">
+              <PropertyRef Name="id_copia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Detalle_V__id_ve__6C190EBB">
+          <End Role="Venta" Type="Self.Venta" Multiplicity="0..1" />
+          <End Role="Detalle_Venta" Type="Self.Detalle_Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="id_venta" />
+            </Principal>
+            <Dependent Role="Detalle_Venta">
+              <PropertyRef Name="id_venta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Libro__id_autor__5FB337D6">
+          <End Role="Autor" Type="Self.Autor" Multiplicity="0..1" />
+          <End Role="Libro" Type="Self.Libro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Autor">
+              <PropertyRef Name="id_autor" />
+            </Principal>
+            <Dependent Role="Libro">
+              <PropertyRef Name="id_autor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Prestamo__id_cli__71D1E811">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Prestamo" Type="Self.Prestamo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="Prestamo">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Prestamo__id_cop__72C60C4A">
+          <End Role="Copia" Type="Self.Copia" Multiplicity="0..1" />
+          <End Role="Prestamo" Type="Self.Prestamo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Copia">
+              <PropertyRef Name="id_copia" />
+            </Principal>
+            <Dependent Role="Prestamo">
+              <PropertyRef Name="id_copia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Venta__id_client__693CA210">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="DeleteAutorSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_autor" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteClienteSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_cliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteCopiaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_copia" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteDetalle_VentaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_detalle" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteLibroSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_libro" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeletePrestamoSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_prestamo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteVentaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_venta" Type="int" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="InsertAutorSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertClienteSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nombre" Type="varchar" Mode="In" />
+          <Parameter Name="email" Type="varchar" Mode="In" />
+          <Parameter Name="telefono" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertCopiaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_libro" Type="int" Mode="In" />
+          <Parameter Name="tipo" Type="varchar" Mode="In" />
+          <Parameter Name="estado" Type="varchar" Mode="In" />
+          <Parameter Name="precio" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="InsertDetalle_VentaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_venta" Type="int" Mode="In" />
+          <Parameter Name="id_copia" Type="int" Mode="In" />
+          <Parameter Name="precio_unitario" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="InsertLibroSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="titulo" Type="varchar" Mode="In" />
+          <Parameter Name="id_autor" Type="int" Mode="In" />
+          <Parameter Name="isbn" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertPrestamoSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_cliente" Type="int" Mode="In" />
+          <Parameter Name="id_copia" Type="int" Mode="In" />
+          <Parameter Name="fecha_prestamo" Type="datetime" Mode="In" />
+          <Parameter Name="fecha_limite" Type="datetime" Mode="In" />
+          <Parameter Name="estado" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertVentaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_cliente" Type="int" Mode="In" />
+          <Parameter Name="total" Type="decimal" Mode="In" />
+          <Parameter Name="fecha_venta" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="ListAutorByIdSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_autor" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ListAutorSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ListClienteByIdSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_cliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ListClienteSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ListCopiaByIdSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_copia" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ListCopiaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ListDetalle_VentaByIdSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_detalle" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ListDetalle_VentaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ListLibroByIdSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_libro" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ListLibroSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ListPrestamoByIdSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_prestamo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ListPrestamoSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ListVentaByIdSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_venta" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ListVentaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="UpdateAutorSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_autor" Type="int" Mode="In" />
+          <Parameter Name="nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateClienteSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_cliente" Type="int" Mode="In" />
+          <Parameter Name="nombre" Type="varchar" Mode="In" />
+          <Parameter Name="email" Type="varchar" Mode="In" />
+          <Parameter Name="telefono" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateCopiaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_copia" Type="int" Mode="In" />
+          <Parameter Name="id_libro" Type="int" Mode="In" />
+          <Parameter Name="tipo" Type="varchar" Mode="In" />
+          <Parameter Name="estado" Type="varchar" Mode="In" />
+          <Parameter Name="precio" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="UpdateDetalle_VentaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_detalle" Type="int" Mode="In" />
+          <Parameter Name="id_venta" Type="int" Mode="In" />
+          <Parameter Name="id_copia" Type="int" Mode="In" />
+          <Parameter Name="precio_unitario" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="UpdateLibroSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_libro" Type="int" Mode="In" />
+          <Parameter Name="titulo" Type="varchar" Mode="In" />
+          <Parameter Name="id_autor" Type="int" Mode="In" />
+          <Parameter Name="isbn" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UpdatePrestamoSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_prestamo" Type="int" Mode="In" />
+          <Parameter Name="id_cliente" Type="int" Mode="In" />
+          <Parameter Name="id_copia" Type="int" Mode="In" />
+          <Parameter Name="fecha_prestamo" Type="datetime" Mode="In" />
+          <Parameter Name="fecha_limite" Type="datetime" Mode="In" />
+          <Parameter Name="fecha_devolucion" Type="datetime" Mode="In" />
+          <Parameter Name="estado" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateVentaSP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_venta" Type="int" Mode="In" />
+          <Parameter Name="id_cliente" Type="int" Mode="In" />
+          <Parameter Name="fecha_venta" Type="datetime" Mode="In" />
+          <Parameter Name="total" Type="decimal" Mode="In" />
+        </Function>
+        <EntityContainer Name="LibraryModelStoreContainer">
+          <EntitySet Name="Autor" EntityType="Self.Autor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Copia" EntityType="Self.Copia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Detalle_Venta" EntityType="Self.Detalle_Venta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Libro" EntityType="Self.Libro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Prestamo" EntityType="Self.Prestamo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Venta" EntityType="Self.Venta" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Copia__id_libro__628FA481" Association="Self.FK__Copia__id_libro__628FA481">
+            <End Role="Libro" EntitySet="Libro" />
+            <End Role="Copia" EntitySet="Copia" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Detalle_V__id_co__6D0D32F4" Association="Self.FK__Detalle_V__id_co__6D0D32F4">
+            <End Role="Copia" EntitySet="Copia" />
+            <End Role="Detalle_Venta" EntitySet="Detalle_Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Detalle_V__id_ve__6C190EBB" Association="Self.FK__Detalle_V__id_ve__6C190EBB">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="Detalle_Venta" EntitySet="Detalle_Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Libro__id_autor__5FB337D6" Association="Self.FK__Libro__id_autor__5FB337D6">
+            <End Role="Autor" EntitySet="Autor" />
+            <End Role="Libro" EntitySet="Libro" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Prestamo__id_cli__71D1E811" Association="Self.FK__Prestamo__id_cli__71D1E811">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Prestamo" EntitySet="Prestamo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Prestamo__id_cop__72C60C4A" Association="Self.FK__Prestamo__id_cop__72C60C4A">
+            <End Role="Copia" EntitySet="Copia" />
+            <End Role="Prestamo" EntitySet="Prestamo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Venta__id_client__693CA210" Association="Self.FK__Venta__id_client__693CA210">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LibraryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Autor">
+          <Key>
+            <PropertyRef Name="id_autor" />
+          </Key>
+          <Property Name="id_autor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Libroes" Relationship="Self.FK__Libro__id_autor__5FB337D6" FromRole="Autor" ToRole="Libro" />
+        </EntityType>
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="id_cliente" />
+          </Key>
+          <Property Name="id_cliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Prestamoes" Relationship="Self.FK__Prestamo__id_cli__71D1E811" FromRole="Cliente" ToRole="Prestamo" />
+          <NavigationProperty Name="Ventas" Relationship="Self.FK__Venta__id_client__693CA210" FromRole="Cliente" ToRole="Venta" />
+        </EntityType>
+        <EntityType Name="Copia">
+          <Key>
+            <PropertyRef Name="id_copia" />
+          </Key>
+          <Property Name="id_copia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_libro" Type="Int32" />
+          <Property Name="tipo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="precio" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Libro" Relationship="Self.FK__Copia__id_libro__628FA481" FromRole="Copia" ToRole="Libro" />
+          <NavigationProperty Name="Detalle_Venta" Relationship="Self.FK__Detalle_V__id_co__6D0D32F4" FromRole="Copia" ToRole="Detalle_Venta" />
+          <NavigationProperty Name="Prestamoes" Relationship="Self.FK__Prestamo__id_cop__72C60C4A" FromRole="Copia" ToRole="Prestamo" />
+        </EntityType>
+        <EntityType Name="Detalle_Venta">
+          <Key>
+            <PropertyRef Name="id_detalle" />
+          </Key>
+          <Property Name="id_detalle" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_venta" Type="Int32" />
+          <Property Name="id_copia" Type="Int32" />
+          <Property Name="precio_unitario" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Copia" Relationship="Self.FK__Detalle_V__id_co__6D0D32F4" FromRole="Detalle_Venta" ToRole="Copia" />
+          <NavigationProperty Name="Venta" Relationship="Self.FK__Detalle_V__id_ve__6C190EBB" FromRole="Detalle_Venta" ToRole="Venta" />
+        </EntityType>
+        <EntityType Name="Libro">
+          <Key>
+            <PropertyRef Name="id_libro" />
+          </Key>
+          <Property Name="id_libro" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="titulo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_autor" Type="Int32" />
+          <Property Name="isbn" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Autor" Relationship="Self.FK__Libro__id_autor__5FB337D6" FromRole="Libro" ToRole="Autor" />
+          <NavigationProperty Name="Copias" Relationship="Self.FK__Copia__id_libro__628FA481" FromRole="Libro" ToRole="Copia" />
+        </EntityType>
+        <EntityType Name="Prestamo">
+          <Key>
+            <PropertyRef Name="id_prestamo" />
+          </Key>
+          <Property Name="id_prestamo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_cliente" Type="Int32" />
+          <Property Name="id_copia" Type="Int32" />
+          <Property Name="fecha_prestamo" Type="DateTime" Precision="3" />
+          <Property Name="fecha_limite" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fecha_devolucion" Type="DateTime" Precision="3" />
+          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK__Prestamo__id_cli__71D1E811" FromRole="Prestamo" ToRole="Cliente" />
+          <NavigationProperty Name="Copia" Relationship="Self.FK__Prestamo__id_cop__72C60C4A" FromRole="Prestamo" ToRole="Copia" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="id_venta" />
+          </Key>
+          <Property Name="id_venta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_cliente" Type="Int32" />
+          <Property Name="fecha_venta" Type="DateTime" Precision="3" />
+          <Property Name="total" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK__Venta__id_client__693CA210" FromRole="Venta" ToRole="Cliente" />
+          <NavigationProperty Name="Detalle_Venta" Relationship="Self.FK__Detalle_V__id_ve__6C190EBB" FromRole="Venta" ToRole="Detalle_Venta" />
+        </EntityType>
+        <Association Name="FK__Libro__id_autor__5FB337D6">
+          <End Role="Autor" Type="Self.Autor" Multiplicity="0..1" />
+          <End Role="Libro" Type="Self.Libro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Autor">
+              <PropertyRef Name="id_autor" />
+            </Principal>
+            <Dependent Role="Libro">
+              <PropertyRef Name="id_autor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Prestamo__id_cli__71D1E811">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Prestamo" Type="Self.Prestamo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="Prestamo">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Venta__id_client__693CA210">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Copia__id_libro__628FA481">
+          <End Role="Libro" Type="Self.Libro" Multiplicity="0..1" />
+          <End Role="Copia" Type="Self.Copia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Libro">
+              <PropertyRef Name="id_libro" />
+            </Principal>
+            <Dependent Role="Copia">
+              <PropertyRef Name="id_libro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Detalle_V__id_co__6D0D32F4">
+          <End Role="Copia" Type="Self.Copia" Multiplicity="0..1" />
+          <End Role="Detalle_Venta" Type="Self.Detalle_Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Copia">
+              <PropertyRef Name="id_copia" />
+            </Principal>
+            <Dependent Role="Detalle_Venta">
+              <PropertyRef Name="id_copia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Prestamo__id_cop__72C60C4A">
+          <End Role="Copia" Type="Self.Copia" Multiplicity="0..1" />
+          <End Role="Prestamo" Type="Self.Prestamo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Copia">
+              <PropertyRef Name="id_copia" />
+            </Principal>
+            <Dependent Role="Prestamo">
+              <PropertyRef Name="id_copia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Detalle_V__id_ve__6C190EBB">
+          <End Role="Venta" Type="Self.Venta" Multiplicity="0..1" />
+          <End Role="Detalle_Venta" Type="Self.Detalle_Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="id_venta" />
+            </Principal>
+            <Dependent Role="Detalle_Venta">
+              <PropertyRef Name="id_venta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LibraryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Autors" EntityType="Self.Autor" />
+          <EntitySet Name="Clientes" EntityType="Self.Cliente" />
+          <EntitySet Name="Copias" EntityType="Self.Copia" />
+          <EntitySet Name="Detalle_Venta" EntityType="Self.Detalle_Venta" />
+          <EntitySet Name="Libroes" EntityType="Self.Libro" />
+          <EntitySet Name="Prestamoes" EntityType="Self.Prestamo" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Ventas" EntityType="Self.Venta" />
+          <AssociationSet Name="FK__Libro__id_autor__5FB337D6" Association="Self.FK__Libro__id_autor__5FB337D6">
+            <End Role="Autor" EntitySet="Autors" />
+            <End Role="Libro" EntitySet="Libroes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Prestamo__id_cli__71D1E811" Association="Self.FK__Prestamo__id_cli__71D1E811">
+            <End Role="Cliente" EntitySet="Clientes" />
+            <End Role="Prestamo" EntitySet="Prestamoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Venta__id_client__693CA210" Association="Self.FK__Venta__id_client__693CA210">
+            <End Role="Cliente" EntitySet="Clientes" />
+            <End Role="Venta" EntitySet="Ventas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Copia__id_libro__628FA481" Association="Self.FK__Copia__id_libro__628FA481">
+            <End Role="Libro" EntitySet="Libroes" />
+            <End Role="Copia" EntitySet="Copias" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Detalle_V__id_co__6D0D32F4" Association="Self.FK__Detalle_V__id_co__6D0D32F4">
+            <End Role="Copia" EntitySet="Copias" />
+            <End Role="Detalle_Venta" EntitySet="Detalle_Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Prestamo__id_cop__72C60C4A" Association="Self.FK__Prestamo__id_cop__72C60C4A">
+            <End Role="Copia" EntitySet="Copias" />
+            <End Role="Prestamo" EntitySet="Prestamoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Detalle_V__id_ve__6C190EBB" Association="Self.FK__Detalle_V__id_ve__6C190EBB">
+            <End Role="Venta" EntitySet="Ventas" />
+            <End Role="Detalle_Venta" EntitySet="Detalle_Venta" />
+          </AssociationSet>
+          <FunctionImport Name="DeleteAutorSP">
+            <Parameter Name="id_autor" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteClienteSP">
+            <Parameter Name="id_cliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteCopiaSP">
+            <Parameter Name="id_copia" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteDetalle_VentaSP">
+            <Parameter Name="id_detalle" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteLibroSP">
+            <Parameter Name="id_libro" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeletePrestamoSP">
+            <Parameter Name="id_prestamo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteVentaSP">
+            <Parameter Name="id_venta" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertAutorSP">
+            <Parameter Name="nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertClienteSP">
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="telefono" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertCopiaSP">
+            <Parameter Name="id_libro" Mode="In" Type="Int32" />
+            <Parameter Name="tipo" Mode="In" Type="String" />
+            <Parameter Name="estado" Mode="In" Type="String" />
+            <Parameter Name="precio" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="InsertDetalle_VentaSP">
+            <Parameter Name="id_venta" Mode="In" Type="Int32" />
+            <Parameter Name="id_copia" Mode="In" Type="Int32" />
+            <Parameter Name="precio_unitario" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="InsertLibroSP">
+            <Parameter Name="titulo" Mode="In" Type="String" />
+            <Parameter Name="id_autor" Mode="In" Type="Int32" />
+            <Parameter Name="isbn" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertPrestamoSP">
+            <Parameter Name="id_cliente" Mode="In" Type="Int32" />
+            <Parameter Name="id_copia" Mode="In" Type="Int32" />
+            <Parameter Name="fecha_prestamo" Mode="In" Type="DateTime" />
+            <Parameter Name="fecha_limite" Mode="In" Type="DateTime" />
+            <Parameter Name="estado" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertVentaSP">
+            <Parameter Name="id_cliente" Mode="In" Type="Int32" />
+            <Parameter Name="total" Mode="In" Type="Decimal" />
+            <Parameter Name="fecha_venta" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="ListAutorByIdSP" ReturnType="Collection(LibraryModel.ListAutorByIdSP_Result)">
+            <Parameter Name="id_autor" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ListAutorSP" ReturnType="Collection(LibraryModel.ListAutorSP_Result)" />
+          <FunctionImport Name="ListClienteByIdSP" ReturnType="Collection(LibraryModel.ListClienteByIdSP_Result)">
+            <Parameter Name="id_cliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ListClienteSP" ReturnType="Collection(LibraryModel.ListClienteSP_Result)" />
+          <FunctionImport Name="ListCopiaByIdSP" ReturnType="Collection(LibraryModel.ListCopiaByIdSP_Result)">
+            <Parameter Name="id_copia" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ListCopiaSP" ReturnType="Collection(LibraryModel.ListCopiaSP_Result)" />
+          <FunctionImport Name="ListDetalle_VentaByIdSP" ReturnType="Collection(LibraryModel.ListDetalle_VentaByIdSP_Result)">
+            <Parameter Name="id_detalle" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ListDetalle_VentaSP" ReturnType="Collection(LibraryModel.ListDetalle_VentaSP_Result)" />
+          <FunctionImport Name="ListLibroByIdSP" ReturnType="Collection(LibraryModel.ListLibroByIdSP_Result)">
+            <Parameter Name="id_libro" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ListLibroSP" ReturnType="Collection(LibraryModel.ListLibroSP_Result)" />
+          <FunctionImport Name="ListPrestamoByIdSP" ReturnType="Collection(LibraryModel.ListPrestamoByIdSP_Result)">
+            <Parameter Name="id_prestamo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ListPrestamoSP" ReturnType="Collection(LibraryModel.ListPrestamoSP_Result)" />
+          <FunctionImport Name="ListVentaByIdSP" ReturnType="Collection(LibraryModel.ListVentaByIdSP_Result)">
+            <Parameter Name="id_venta" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ListVentaSP" ReturnType="Collection(LibraryModel.ListVentaSP_Result)" />
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(LibraryModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(LibraryModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="UpdateAutorSP">
+            <Parameter Name="id_autor" Mode="In" Type="Int32" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateClienteSP">
+            <Parameter Name="id_cliente" Mode="In" Type="Int32" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="telefono" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateCopiaSP">
+            <Parameter Name="id_copia" Mode="In" Type="Int32" />
+            <Parameter Name="id_libro" Mode="In" Type="Int32" />
+            <Parameter Name="tipo" Mode="In" Type="String" />
+            <Parameter Name="estado" Mode="In" Type="String" />
+            <Parameter Name="precio" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateDetalle_VentaSP">
+            <Parameter Name="id_detalle" Mode="In" Type="Int32" />
+            <Parameter Name="id_venta" Mode="In" Type="Int32" />
+            <Parameter Name="id_copia" Mode="In" Type="Int32" />
+            <Parameter Name="precio_unitario" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateLibroSP">
+            <Parameter Name="id_libro" Mode="In" Type="Int32" />
+            <Parameter Name="titulo" Mode="In" Type="String" />
+            <Parameter Name="id_autor" Mode="In" Type="Int32" />
+            <Parameter Name="isbn" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdatePrestamoSP">
+            <Parameter Name="id_prestamo" Mode="In" Type="Int32" />
+            <Parameter Name="id_cliente" Mode="In" Type="Int32" />
+            <Parameter Name="id_copia" Mode="In" Type="Int32" />
+            <Parameter Name="fecha_prestamo" Mode="In" Type="DateTime" />
+            <Parameter Name="fecha_limite" Mode="In" Type="DateTime" />
+            <Parameter Name="fecha_devolucion" Mode="In" Type="DateTime" />
+            <Parameter Name="estado" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateVentaSP">
+            <Parameter Name="id_venta" Mode="In" Type="Int32" />
+            <Parameter Name="id_cliente" Mode="In" Type="Int32" />
+            <Parameter Name="fecha_venta" Mode="In" Type="DateTime" />
+            <Parameter Name="total" Mode="In" Type="Decimal" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="ListAutorByIdSP_Result">
+          <Property Type="Int32" Name="id_autor" Nullable="false" />
+          <Property Type="String" Name="nombre" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ListAutorSP_Result">
+          <Property Type="Int32" Name="id_autor" Nullable="false" />
+          <Property Type="String" Name="nombre" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ListClienteByIdSP_Result">
+          <Property Type="Int32" Name="id_cliente" Nullable="false" />
+          <Property Type="String" Name="nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="email" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="telefono" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="ListClienteSP_Result">
+          <Property Type="Int32" Name="id_cliente" Nullable="false" />
+          <Property Type="String" Name="nombre" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="email" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="telefono" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="ListCopiaByIdSP_Result">
+          <Property Type="Int32" Name="id_copia" Nullable="false" />
+          <Property Type="Int32" Name="id_libro" Nullable="true" />
+          <Property Type="String" Name="tipo" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="estado" Nullable="false" MaxLength="20" />
+          <Property Type="Decimal" Name="precio" Nullable="true" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="ListCopiaSP_Result">
+          <Property Type="Int32" Name="id_copia" Nullable="false" />
+          <Property Type="Int32" Name="id_libro" Nullable="true" />
+          <Property Type="String" Name="tipo" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="estado" Nullable="false" MaxLength="20" />
+          <Property Type="Decimal" Name="precio" Nullable="true" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="ListDetalle_VentaByIdSP_Result">
+          <Property Type="Int32" Name="id_detalle" Nullable="false" />
+          <Property Type="Int32" Name="id_venta" Nullable="true" />
+          <Property Type="Int32" Name="id_copia" Nullable="true" />
+          <Property Type="Decimal" Name="precio_unitario" Nullable="true" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="ListDetalle_VentaSP_Result">
+          <Property Type="Int32" Name="id_detalle" Nullable="false" />
+          <Property Type="Int32" Name="id_venta" Nullable="true" />
+          <Property Type="Int32" Name="id_copia" Nullable="true" />
+          <Property Type="Decimal" Name="precio_unitario" Nullable="true" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="ListLibroByIdSP_Result">
+          <Property Type="Int32" Name="id_libro" Nullable="false" />
+          <Property Type="String" Name="titulo" Nullable="false" MaxLength="200" />
+          <Property Type="Int32" Name="id_autor" Nullable="true" />
+          <Property Type="String" Name="isbn" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="ListLibroSP_Result">
+          <Property Type="Int32" Name="id_libro" Nullable="false" />
+          <Property Type="String" Name="titulo" Nullable="false" MaxLength="200" />
+          <Property Type="Int32" Name="id_autor" Nullable="true" />
+          <Property Type="String" Name="isbn" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="ListPrestamoByIdSP_Result">
+          <Property Type="Int32" Name="id_prestamo" Nullable="false" />
+          <Property Type="Int32" Name="id_cliente" Nullable="true" />
+          <Property Type="Int32" Name="id_copia" Nullable="true" />
+          <Property Type="DateTime" Name="fecha_prestamo" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="fecha_limite" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="fecha_devolucion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="estado" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="ListPrestamoSP_Result">
+          <Property Type="Int32" Name="id_prestamo" Nullable="false" />
+          <Property Type="Int32" Name="id_cliente" Nullable="true" />
+          <Property Type="Int32" Name="id_copia" Nullable="true" />
+          <Property Type="DateTime" Name="fecha_prestamo" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="fecha_limite" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="fecha_devolucion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="estado" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="ListVentaByIdSP_Result">
+          <Property Type="Int32" Name="id_venta" Nullable="false" />
+          <Property Type="Int32" Name="id_cliente" Nullable="true" />
+          <Property Type="DateTime" Name="fecha_venta" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="total" Nullable="true" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="ListVentaSP_Result">
+          <Property Type="Int32" Name="id_venta" Nullable="false" />
+          <Property Type="Int32" Name="id_cliente" Nullable="true" />
+          <Property Type="DateTime" Name="fecha_venta" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="total" Nullable="true" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LibraryModelStoreContainer" CdmEntityContainer="LibraryEntities">
+          <EntitySetMapping Name="Autors">
+            <EntityTypeMapping TypeName="LibraryModel.Autor">
+              <MappingFragment StoreEntitySet="Autor">
+                <ScalarProperty Name="id_autor" ColumnName="id_autor" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clientes">
+            <EntityTypeMapping TypeName="LibraryModel.Cliente">
+              <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Copias">
+            <EntityTypeMapping TypeName="LibraryModel.Copia">
+              <MappingFragment StoreEntitySet="Copia">
+                <ScalarProperty Name="id_copia" ColumnName="id_copia" />
+                <ScalarProperty Name="id_libro" ColumnName="id_libro" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Detalle_Venta">
+            <EntityTypeMapping TypeName="LibraryModel.Detalle_Venta">
+              <MappingFragment StoreEntitySet="Detalle_Venta">
+                <ScalarProperty Name="id_detalle" ColumnName="id_detalle" />
+                <ScalarProperty Name="id_venta" ColumnName="id_venta" />
+                <ScalarProperty Name="id_copia" ColumnName="id_copia" />
+                <ScalarProperty Name="precio_unitario" ColumnName="precio_unitario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Libroes">
+            <EntityTypeMapping TypeName="LibraryModel.Libro">
+              <MappingFragment StoreEntitySet="Libro">
+                <ScalarProperty Name="id_libro" ColumnName="id_libro" />
+                <ScalarProperty Name="titulo" ColumnName="titulo" />
+                <ScalarProperty Name="id_autor" ColumnName="id_autor" />
+                <ScalarProperty Name="isbn" ColumnName="isbn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Prestamoes">
+            <EntityTypeMapping TypeName="LibraryModel.Prestamo">
+              <MappingFragment StoreEntitySet="Prestamo">
+                <ScalarProperty Name="id_prestamo" ColumnName="id_prestamo" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="id_copia" ColumnName="id_copia" />
+                <ScalarProperty Name="fecha_prestamo" ColumnName="fecha_prestamo" />
+                <ScalarProperty Name="fecha_limite" ColumnName="fecha_limite" />
+                <ScalarProperty Name="fecha_devolucion" ColumnName="fecha_devolucion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="LibraryModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ventas">
+            <EntityTypeMapping TypeName="LibraryModel.Venta">
+              <MappingFragment StoreEntitySet="Venta">
+                <ScalarProperty Name="id_venta" ColumnName="id_venta" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="fecha_venta" ColumnName="fecha_venta" />
+                <ScalarProperty Name="total" ColumnName="total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="DeleteAutorSP" FunctionName="LibraryModel.Store.DeleteAutorSP" />
+          <FunctionImportMapping FunctionImportName="DeleteClienteSP" FunctionName="LibraryModel.Store.DeleteClienteSP" />
+          <FunctionImportMapping FunctionImportName="DeleteCopiaSP" FunctionName="LibraryModel.Store.DeleteCopiaSP" />
+          <FunctionImportMapping FunctionImportName="DeleteDetalle_VentaSP" FunctionName="LibraryModel.Store.DeleteDetalle_VentaSP" />
+          <FunctionImportMapping FunctionImportName="DeleteLibroSP" FunctionName="LibraryModel.Store.DeleteLibroSP" />
+          <FunctionImportMapping FunctionImportName="DeletePrestamoSP" FunctionName="LibraryModel.Store.DeletePrestamoSP" />
+          <FunctionImportMapping FunctionImportName="DeleteVentaSP" FunctionName="LibraryModel.Store.DeleteVentaSP" />
+          <FunctionImportMapping FunctionImportName="InsertAutorSP" FunctionName="LibraryModel.Store.InsertAutorSP" />
+          <FunctionImportMapping FunctionImportName="InsertClienteSP" FunctionName="LibraryModel.Store.InsertClienteSP" />
+          <FunctionImportMapping FunctionImportName="InsertCopiaSP" FunctionName="LibraryModel.Store.InsertCopiaSP" />
+          <FunctionImportMapping FunctionImportName="InsertDetalle_VentaSP" FunctionName="LibraryModel.Store.InsertDetalle_VentaSP" />
+          <FunctionImportMapping FunctionImportName="InsertLibroSP" FunctionName="LibraryModel.Store.InsertLibroSP" />
+          <FunctionImportMapping FunctionImportName="InsertPrestamoSP" FunctionName="LibraryModel.Store.InsertPrestamoSP" />
+          <FunctionImportMapping FunctionImportName="InsertVentaSP" FunctionName="LibraryModel.Store.InsertVentaSP" />
+          <FunctionImportMapping FunctionImportName="ListAutorByIdSP" FunctionName="LibraryModel.Store.ListAutorByIdSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListAutorByIdSP_Result">
+                <ScalarProperty Name="id_autor" ColumnName="id_autor" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListAutorSP" FunctionName="LibraryModel.Store.ListAutorSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListAutorSP_Result">
+                <ScalarProperty Name="id_autor" ColumnName="id_autor" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListClienteByIdSP" FunctionName="LibraryModel.Store.ListClienteByIdSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListClienteByIdSP_Result">
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListClienteSP" FunctionName="LibraryModel.Store.ListClienteSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListClienteSP_Result">
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListCopiaByIdSP" FunctionName="LibraryModel.Store.ListCopiaByIdSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListCopiaByIdSP_Result">
+                <ScalarProperty Name="id_copia" ColumnName="id_copia" />
+                <ScalarProperty Name="id_libro" ColumnName="id_libro" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListCopiaSP" FunctionName="LibraryModel.Store.ListCopiaSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListCopiaSP_Result">
+                <ScalarProperty Name="id_copia" ColumnName="id_copia" />
+                <ScalarProperty Name="id_libro" ColumnName="id_libro" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListDetalle_VentaByIdSP" FunctionName="LibraryModel.Store.ListDetalle_VentaByIdSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListDetalle_VentaByIdSP_Result">
+                <ScalarProperty Name="id_detalle" ColumnName="id_detalle" />
+                <ScalarProperty Name="id_venta" ColumnName="id_venta" />
+                <ScalarProperty Name="id_copia" ColumnName="id_copia" />
+                <ScalarProperty Name="precio_unitario" ColumnName="precio_unitario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListDetalle_VentaSP" FunctionName="LibraryModel.Store.ListDetalle_VentaSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListDetalle_VentaSP_Result">
+                <ScalarProperty Name="id_detalle" ColumnName="id_detalle" />
+                <ScalarProperty Name="id_venta" ColumnName="id_venta" />
+                <ScalarProperty Name="id_copia" ColumnName="id_copia" />
+                <ScalarProperty Name="precio_unitario" ColumnName="precio_unitario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListLibroByIdSP" FunctionName="LibraryModel.Store.ListLibroByIdSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListLibroByIdSP_Result">
+                <ScalarProperty Name="id_libro" ColumnName="id_libro" />
+                <ScalarProperty Name="titulo" ColumnName="titulo" />
+                <ScalarProperty Name="id_autor" ColumnName="id_autor" />
+                <ScalarProperty Name="isbn" ColumnName="isbn" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListLibroSP" FunctionName="LibraryModel.Store.ListLibroSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListLibroSP_Result">
+                <ScalarProperty Name="id_libro" ColumnName="id_libro" />
+                <ScalarProperty Name="titulo" ColumnName="titulo" />
+                <ScalarProperty Name="id_autor" ColumnName="id_autor" />
+                <ScalarProperty Name="isbn" ColumnName="isbn" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListPrestamoByIdSP" FunctionName="LibraryModel.Store.ListPrestamoByIdSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListPrestamoByIdSP_Result">
+                <ScalarProperty Name="id_prestamo" ColumnName="id_prestamo" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="id_copia" ColumnName="id_copia" />
+                <ScalarProperty Name="fecha_prestamo" ColumnName="fecha_prestamo" />
+                <ScalarProperty Name="fecha_limite" ColumnName="fecha_limite" />
+                <ScalarProperty Name="fecha_devolucion" ColumnName="fecha_devolucion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListPrestamoSP" FunctionName="LibraryModel.Store.ListPrestamoSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListPrestamoSP_Result">
+                <ScalarProperty Name="id_prestamo" ColumnName="id_prestamo" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="id_copia" ColumnName="id_copia" />
+                <ScalarProperty Name="fecha_prestamo" ColumnName="fecha_prestamo" />
+                <ScalarProperty Name="fecha_limite" ColumnName="fecha_limite" />
+                <ScalarProperty Name="fecha_devolucion" ColumnName="fecha_devolucion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListVentaByIdSP" FunctionName="LibraryModel.Store.ListVentaByIdSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListVentaByIdSP_Result">
+                <ScalarProperty Name="id_venta" ColumnName="id_venta" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="fecha_venta" ColumnName="fecha_venta" />
+                <ScalarProperty Name="total" ColumnName="total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ListVentaSP" FunctionName="LibraryModel.Store.ListVentaSP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.ListVentaSP_Result">
+                <ScalarProperty Name="id_venta" ColumnName="id_venta" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="fecha_venta" ColumnName="fecha_venta" />
+                <ScalarProperty Name="total" ColumnName="total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="LibraryModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="LibraryModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="LibraryModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="LibraryModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="LibraryModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibraryModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="LibraryModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="LibraryModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="UpdateAutorSP" FunctionName="LibraryModel.Store.UpdateAutorSP" />
+          <FunctionImportMapping FunctionImportName="UpdateClienteSP" FunctionName="LibraryModel.Store.UpdateClienteSP" />
+          <FunctionImportMapping FunctionImportName="UpdateCopiaSP" FunctionName="LibraryModel.Store.UpdateCopiaSP" />
+          <FunctionImportMapping FunctionImportName="UpdateDetalle_VentaSP" FunctionName="LibraryModel.Store.UpdateDetalle_VentaSP" />
+          <FunctionImportMapping FunctionImportName="UpdateLibroSP" FunctionName="LibraryModel.Store.UpdateLibroSP" />
+          <FunctionImportMapping FunctionImportName="UpdatePrestamoSP" FunctionName="LibraryModel.Store.UpdatePrestamoSP" />
+          <FunctionImportMapping FunctionImportName="UpdateVentaSP" FunctionName="LibraryModel.Store.UpdateVentaSP" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

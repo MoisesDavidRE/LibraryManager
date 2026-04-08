@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Library.Models.Prestamo>
+
+@{
+    ViewBag.Title = "Panel de Control";
+}
+
+<div class="mt-4">
+    <h2 class="mb-4">Resumen de la Librería</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Copias Disponibles</h6>
+                    <h2 class="mb-0">@ViewBag.TotalLibros</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Ventas del Mes</h6>
+                    <h2 class="mb-0">$@Convert.ToDecimal(ViewBag.VentasMes).ToString("N2")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Préstamos Activos</h6>
+                    <h2 class="mb-0">@ViewBag.PrestamosActivos</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Préstamos Vencidos</h6>
+                    <h2 class="mb-0">@ViewBag.PrestamosVencidos</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Próximos a Vencer / Vencidos</h5>
+        </div>
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Libro</th>
+                            <th>Fecha Límite</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var esVencido = item.fecha_limite < DateTime.Now;
+                            <tr class="@(esVencido ? "table-danger" : "")">
+                                <td>@item.Cliente.nombre</td>
+                                <td>@item.Copia.Libro.titulo</td>
+                                <td>@item.fecha_limite.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @if (esVencido)
+                                    {
+                                        <span class="badge bg-danger">Vencido</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Pendiente</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-success mb-0">
+                    No hay préstamos pendientes por revisar.
+                </div>
+            }
+        </div>
+    </div>
+</div>

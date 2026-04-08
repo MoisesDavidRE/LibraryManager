@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Library.Models.Prestamo>
+
+@{
+    ViewBag.Title = "Devoluciones Pendientes";
+}
+
+<div class="card mt-4">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">Libros Pendientes de Devolución</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover" id="tablaDevoluciones">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Libro (Copia)</th>
+                    <th>Fecha Préstamo</th>
+                    <th>Fecha Límite</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var rowClass = item.fecha_limite < DateTime.Now ? "table-danger" : "";
+                    <tr id="fila-@item.id_prestamo" class="@rowClass">
+                        <td>@item.Cliente.nombre</td>
+                        <td>@item.Copia.Libro.titulo (@item.Copia.tipo)</td>
+                        <td>@item.fecha_prestamo.Value.ToString("dd/MM/yyyy")</td>
+                        <td>@item.fecha_limite.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-success" onclick="procesarDevolucion(@item.id_prestamo)">
+                                Recibir Devolución
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function procesarDevolucion(idPrestamo) {
+            if (!confirm("¿Confirmar la devolución de este libro?")) return;
+
+            $.ajax({
+                url: '@Url.Action("ProcesarDevolucion", "Prestamoes")',
+                type: 'POST',
+                data: { idPrestamo: idPrestamo },
+                success: function (response) {
+                    if (response.success) {
+                        $("#fila-" + idPrestamo).fadeOut("slow", function() {
+                            $(this).remove();
+                        });
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Ocurrió un error en el servidor.");
+                }
+            });
+        }
+    </script>
+}

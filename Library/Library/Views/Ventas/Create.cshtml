@@ -1,0 +1,165 @@
+﻿@model Library.ViewModels.NuevaVentaViewModel
+
+@{
+    ViewBag.Title = "Nueva Venta";
+}
+
+<div class="row mt-4">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Datos de la Venta</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Cliente</label>
+                    @Html.DropDownListFor(m => m.IdCliente, Model.ClientesDisponibles, "Seleccione un cliente...", new { @class = "form-select", id = "selectCliente" })
+                </div>
+
+                <hr />
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Agregar Libro (Copia)</label>
+                    @Html.DropDownListFor(m => m.IdCopiaSeleccionada, Model.CopiasDisponibles, "Seleccione una copia...", new { @class = "form-select", id = "selectCopia" })
+                </div>
+
+                <button type="button" id="btnAgregar" class="btn btn-success w-100">
+                    + Agregar al Carrito
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Detalle del Carrito</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover" id="tablaCarrito">
+                    <thead>
+                        <tr>
+                            <th>Libro</th>
+                            <th>Precio</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+                <div class="text-end mt-3">
+                    <h4>Total: $<span id="lblTotal">0.00</span></h4>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <button type="button" id="btnProcesarVenta" class="btn btn-primary btn-lg">
+                    Procesar Venta
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var carrito = []; // Arreglo para guardar los IDs de las copias seleccionadas
+        var total = 0.0;
+
+        $(document).ready(function () {
+
+            // Acción: Agregar al carrito
+            $("#btnAgregar").click(function () {
+                var idCopia = $("#selectCopia").val();
+                var textoCopia = $("#selectCopia option:selected").text(); // Ej: "El Quijote - $150.00"
+
+                if (!idCopia) {
+                    alert("Por favor seleccione un libro.");
+                    return;
+                }
+
+                if (carrito.includes(idCopia)) {
+                    alert("Esta copia ya fue agregada al carrito.");
+                    return;
+                }
+
+                // Extraer el precio del texto (asumiendo formato "Titulo - $Precio")
+                var precioStr = textoCopia.split('$')[1];
+                var precio = parseFloat(precioStr);
+
+                // Agregar al arreglo
+                carrito.push(idCopia);
+                total += precio;
+
+                // Crear fila en la tabla
+                var fila = `<tr id="fila-${idCopia}">
+                                <td>${textoCopia.split('-')[0]}</td>
+                                <td>$${precio.toFixed(2)}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="eliminarCopia(${idCopia}, ${precio})">X</button>
+                                </td>
+                            </tr>`;
+
+                $("#tablaCarrito tbody").append(fila);
+                actualizarTotal();
+
+                // Limpiar selector
+                $("#selectCopia").val('');
+            });
+
+            // Acción: Procesar Venta por AJAX
+            $("#btnProcesarVenta").click(function () {
+                var idCliente = $("#selectCliente").val();
+
+                if (!idCliente) {
+                    alert("Debe seleccionar un cliente.");
+                    return;
+                }
+                if (carrito.length === 0) {
+                    alert("El carrito está vacío.");
+                    return;
+                }
+
+                // Deshabilitar botón para evitar dobles clics
+                $(this).prop('disabled', true).text('Procesando...');
+
+                // Enviar datos al controlador
+                $.ajax({
+                    url: '@Url.Action("ProcesarVenta", "Ventas")',
+                    type: 'POST',
+                    data: {
+                        idCliente: idCliente,
+                        idsCopias: carrito
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Venta procesada con éxito.");
+                            window.location.href = '@Url.Action("Index", "Ventas")'; // Redirigir al historial
+                        } else {
+                            alert("Error: " + response.message);
+                            $("#btnProcesarVenta").prop('disabled', false).text('Procesar Venta');
+                        }
+                    },
+                    error: function () {
+                        alert("Ocurrió un error en el servidor.");
+                        $("#btnProcesarVenta").prop('disabled', false).text('Procesar Venta');
+                    }
+                });
+            });
+        });
+
+        function eliminarCopia(idCopia, precio) {
+            // Remover del arreglo
+            carrito = carrito.filter(id => id != idCopia);
+            // Restar del total
+            total -= precio;
+            // Remover de la vista
+            $("#fila-" + idCopia).remove();
+            actualizarTotal();
+        }
+
+        function actualizarTotal() {
+            $("#lblTotal").text(total.toFixed(2));
+        }
+    </script>
+}

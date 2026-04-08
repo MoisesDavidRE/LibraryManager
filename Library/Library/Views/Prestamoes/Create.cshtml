@@ -1,0 +1,146 @@
+﻿@model Library.ViewModels.NuevoPrestamoViewModel
+
+@{
+    ViewBag.Title = "Nuevo Préstamo";
+}
+
+<div class="row mt-4">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Datos del Préstamo</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Cliente</label>
+                    @Html.DropDownListFor(m => m.IdCliente, Model.ClientesDisponibles, "Seleccione un cliente...", new { @class = "form-select", id = "selectCliente" })
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Fecha Límite de Devolución</label>
+                    @Html.TextBoxFor(m => m.FechaLimite, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", id = "inputFechaLimite" })
+                </div>
+
+                <hr />
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Agregar Libro (Copia)</label>
+                    @Html.DropDownListFor(m => m.IdCopiaSeleccionada, Model.CopiasDisponibles, "Seleccione una copia...", new { @class = "form-select", id = "selectCopia" })
+                </div>
+
+                <button type="button" id="btnAgregar" class="btn btn-secondary w-100">
+                    + Agregar a la Lista
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Libros a Prestar</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover" id="tablaPrestamos">
+                    <thead>
+                        <tr>
+                            <th>Libro (Formato)</th>
+                            <th class="text-end">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-end">
+                <button type="button" id="btnProcesarPrestamo" class="btn btn-success btn-lg">
+                    Procesar Préstamo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var listaCopias = [];
+
+        $(document).ready(function () {
+
+            $("#btnAgregar").click(function () {
+                var idCopia = $("#selectCopia").val();
+                var textoCopia = $("#selectCopia option:selected").text();
+
+                if (!idCopia) {
+                    alert("Por favor seleccione un libro.");
+                    return;
+                }
+
+                if (listaCopias.includes(idCopia)) {
+                    alert("Este libro ya está en la lista.");
+                    return;
+                }
+
+                listaCopias.push(idCopia);
+
+                var fila = `<tr id="fila-${idCopia}">
+                                <td>${textoCopia}</td>
+                                <td class="text-end">
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="eliminarCopia(${idCopia})">X</button>
+                                </td>
+                            </tr>`;
+
+                $("#tablaPrestamos tbody").append(fila);
+                $("#selectCopia").val('');
+            });
+
+            $("#btnProcesarPrestamo").click(function () {
+                var idCliente = $("#selectCliente").val();
+                var fechaLimite = $("#inputFechaLimite").val();
+
+                if (!idCliente) {
+                    alert("Debe seleccionar un cliente.");
+                    return;
+                }
+                if (!fechaLimite) {
+                    alert("Debe establecer una fecha límite.");
+                    return;
+                }
+                if (listaCopias.length === 0) {
+                    alert("No hay libros en la lista.");
+                    return;
+                }
+
+                $(this).prop('disabled', true).text('Procesando...');
+
+                $.ajax({
+                    url: '@Url.Action("ProcesarPrestamos", "Prestamoes")',
+                    type: 'POST',
+                    data: {
+                        idCliente: idCliente,
+                        fechaLimite: fechaLimite,
+                        idsCopias: listaCopias
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Préstamos registrados con éxito.");
+                            window.location.href = '@Url.Action("Index", "Prestamoes")';
+                        } else {
+                            alert("Error: " + response.message);
+                            $("#btnProcesarPrestamo").prop('disabled', false).text('Procesar Préstamo');
+                        }
+                    },
+                    error: function () {
+                        alert("Ocurrió un error en el servidor.");
+                        $("#btnProcesarPrestamo").prop('disabled', false).text('Procesar Préstamo');
+                    }
+                });
+            });
+        });
+
+        function eliminarCopia(idCopia) {
+            listaCopias = listaCopias.filter(id => id != idCopia);
+            $("#fila-" + idCopia).remove();
+        }
+    </script>
+}

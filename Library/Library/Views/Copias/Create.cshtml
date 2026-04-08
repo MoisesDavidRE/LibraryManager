@@ -1,0 +1,55 @@
+﻿@model Library.Models.Copia
+
+@{
+    ViewBag.Title = "Nueva Copia";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Registrar Nueva Copia</h5>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.id_libro, "Libro", htmlAttributes: new { @class = "form-label fw-bold" })
+                        @Html.DropDownList("id_libro", null, "Seleccione un libro...", htmlAttributes: new { @class = "form-select" })
+                        @Html.ValidationMessageFor(model => model.id_libro, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.tipo, "Tipo", htmlAttributes: new { @class = "form-label fw-bold" })
+                        @Html.EditorFor(model => model.tipo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.tipo, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.estado, "Estado", htmlAttributes: new { @class = "form-label fw-bold" })
+                        @Html.EditorFor(model => model.estado, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.estado, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.precio, "Precio", htmlAttributes: new { @class = "form-label fw-bold" })
+                        @Html.EditorFor(model => model.precio, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.precio, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-secondary" })
+                        <input type="submit" value="Guardar Copia" class="btn btn-success" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

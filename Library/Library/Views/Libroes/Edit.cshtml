@@ -1,0 +1,50 @@
+﻿@model Library.Models.Libro
+
+@{
+    ViewBag.Title = "Editar Libro";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Editar Libro</h5>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.id_libro)
+
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.titulo, "Título", htmlAttributes: new { @class = "form-label fw-bold" })
+                        @Html.EditorFor(model => model.titulo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.titulo, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.isbn, "ISBN", htmlAttributes: new { @class = "form-label fw-bold" })
+                        @Html.EditorFor(model => model.isbn, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.isbn, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.id_autor, "Autor", htmlAttributes: new { @class = "form-label fw-bold" })
+                        @Html.DropDownList("id_autor", null, htmlAttributes: new { @class = "form-select" })
+                        @Html.ValidationMessageFor(model => model.id_autor, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-secondary" })
+                        <input type="submit" value="Actualizar Libro" class="btn btn-primary" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

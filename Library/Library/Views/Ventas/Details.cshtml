@@ -1,0 +1,42 @@
+﻿@model Library.Models.Venta
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Venta</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_venta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_venta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.total)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.total)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cliente.nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cliente.nombre)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id_venta }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

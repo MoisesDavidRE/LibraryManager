@@ -1,0 +1,66 @@
+﻿@model Library.Models.Prestamo
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Prestamo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_prestamo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_prestamo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_limite)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_limite)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_devolucion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_devolucion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cliente.nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cliente.nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Copia.tipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Copia.tipo)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id_prestamo }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,42 @@
+﻿@model Library.Models.Detalle_Venta
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Detalle_Venta</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.precio_unitario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.precio_unitario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Copia.tipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Copia.tipo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Venta.id_venta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Venta.id_venta)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id_detalle }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

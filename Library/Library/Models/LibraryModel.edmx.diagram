@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="67cac37cbdcf4fdabac9b85b9296cb13" Name="Diagram1" ZoomLevel="82">
+        <EntityTypeShape EntityType="LibraryModel.Autor" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryModel.Cliente" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryModel.Copia" Width="1.5" PointX="5.25" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryModel.Detalle_Venta" Width="1.5" PointX="7.5" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryModel.Libro" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryModel.Prestamo" Width="1.5" PointX="10.5" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryModel.sysdiagram" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryModel.Venta" Width="1.5" PointX="5.25" PointY="7.875" IsExpanded="true" />
+        <AssociationConnector Association="LibraryModel.FK__Libro__id_autor__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryModel.FK__Prestamo__id_cli__71D1E811" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryModel.FK__Venta__id_client__693CA210" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryModel.FK__Copia__id_libro__628FA481" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryModel.FK__Detalle_V__id_co__6D0D32F4" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryModel.FK__Prestamo__id_cop__72C60C4A" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryModel.FK__Detalle_V__id_ve__6C190EBB" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
