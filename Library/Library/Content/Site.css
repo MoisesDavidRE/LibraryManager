@@ -1,20 +1,37 @@
-﻿/* Set padding to keep content from hitting the edges */
+﻿html, body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-image: url("https://wallpaperaccess.com/full/253371.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
 .body-content {
     margin-top: 15px;
     padding-left: 15px;
     padding-right: 15px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
+.body-content h2 {
+    color: white;
+}
+
+/* Override the default bootstrap behavior... */
 .dl-horizontal dt {
     white-space: normal;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
+/* Set width on the form input elements... */
+input, select, textarea {
     max-width: 280px;
+}
+
+footer p {
+    color:white;
 }
