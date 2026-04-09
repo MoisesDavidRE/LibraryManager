@@ -1,63 +1,50 @@
 ﻿@model IEnumerable<Library.Models.Prestamo>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Prestamos";
 }
 
-<h2>Index</h2>
+<div class="container mt-4">
+    <h2 class="text-center mb-4"> Lista de Préstamos</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.fecha_prestamo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.fecha_limite)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.fecha_devolucion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.estado)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Cliente.nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Copia.tipo)
-        </th>
-        <th></th>
-    </tr>
+    <p>
+        @Html.ActionLink(" Crear Nuevo", "Create", null, new { @class = "btn btn-primary" })
+    </p>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.fecha_prestamo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.fecha_limite)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.fecha_devolucion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.estado)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cliente.nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Copia.tipo)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id_prestamo }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id_prestamo }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id_prestamo })
-        </td>
-    </tr>
-}
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.fecha_prestamo)</th>
+                <th>@Html.DisplayNameFor(model => model.fecha_limite)</th>
+                <th>@Html.DisplayNameFor(model => model.fecha_devolucion)</th>
+                <th>@Html.DisplayNameFor(model => model.estado)</th>
+                <th>@Html.DisplayNameFor(model => model.Cliente.nombre)</th>
+                <th>@Html.DisplayNameFor(model => model.Copia.tipo)</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
 
-</table>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.fecha_prestamo)</td>
+                    <td>@Html.DisplayFor(modelItem => item.fecha_limite)</td>
+                    <td>@Html.DisplayFor(modelItem => item.fecha_devolucion)</td>
+                    <td>
+                        <span class="badge @(item.estado == "Devuelto" ? "bg-success" : "bg-warning text-dark")">
+                            @Html.DisplayFor(modelItem => item.estado)
+                        </span>
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Cliente.nombre)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Copia.tipo)</td>
+                    <td class="text-center">
+                        @Html.ActionLink("Editar ", "Edit", new { id = item.id_prestamo }, new { @class = "btn btn-sm btn-warning" })
+                        @Html.ActionLink("Detalles ", "Details", new { id = item.id_prestamo }, new { @class = "btn btn-sm btn-info" })
+                        @Html.ActionLink("Borrar ", "Delete", new { id = item.id_prestamo }, new { @class = "btn btn-sm btn-danger" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

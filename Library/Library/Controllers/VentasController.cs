@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Library.Controllers
 {
+    [Authorize]
     public class VentasController : Controller
     {
         private LibraryEntities db = new LibraryEntities();

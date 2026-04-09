@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LibraryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="LibraryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Autor">
           <Key>
             <PropertyRef Name="id_autor" />
@@ -61,6 +61,13 @@
           <Property Name="fecha_devolucion" Type="datetime" />
           <Property Name="estado" Type="varchar" MaxLength="20" />
         </EntityType>
+        <EntityType Name="Rol">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -70,6 +77,16 @@
           <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_rol" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="256" Nullable="false" />
         </EntityType>
         <EntityType Name="Venta">
           <Key>
@@ -149,6 +166,18 @@
             </Principal>
             <Dependent Role="Prestamo">
               <PropertyRef Name="id_copia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuario__id_rol__3F115E1A">
+          <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rol">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="id_rol" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -331,7 +360,9 @@
           <EntitySet Name="Detalle_Venta" EntityType="Self.Detalle_Venta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Libro" EntityType="Self.Libro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Prestamo" EntityType="Self.Prestamo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Venta" EntityType="Self.Venta" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Copia__id_libro__628FA481" Association="Self.FK__Copia__id_libro__628FA481">
             <End Role="Libro" EntitySet="Libro" />
@@ -357,13 +388,16 @@
             <End Role="Copia" EntitySet="Copia" />
             <End Role="Prestamo" EntitySet="Prestamo" />
           </AssociationSet>
+          <AssociationSet Name="FK__Usuario__id_rol__3F115E1A" Association="Self.FK__Usuario__id_rol__3F115E1A">
+            <End Role="Rol" EntitySet="Rol" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
           <AssociationSet Name="FK__Venta__id_client__693CA210" Association="Self.FK__Venta__id_client__693CA210">
             <End Role="Cliente" EntitySet="Cliente" />
             <End Role="Venta" EntitySet="Venta" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LibraryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -578,28 +612,28 @@
             <End Role="Detalle_Venta" EntitySet="Detalle_Venta" />
           </AssociationSet>
           <FunctionImport Name="DeleteAutorSP">
-            <Parameter Name="id_autor" Mode="In" Type="Int32" />
+          <Parameter Name="id_autor" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteClienteSP">
-            <Parameter Name="id_cliente" Mode="In" Type="Int32" />
+          <Parameter Name="id_cliente" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteCopiaSP">
-            <Parameter Name="id_copia" Mode="In" Type="Int32" />
+          <Parameter Name="id_copia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteDetalle_VentaSP">
-            <Parameter Name="id_detalle" Mode="In" Type="Int32" />
+          <Parameter Name="id_detalle" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteLibroSP">
-            <Parameter Name="id_libro" Mode="In" Type="Int32" />
+          <Parameter Name="id_libro" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeletePrestamoSP">
-            <Parameter Name="id_prestamo" Mode="In" Type="Int32" />
+          <Parameter Name="id_prestamo" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteVentaSP">
-            <Parameter Name="id_venta" Mode="In" Type="Int32" />
+          <Parameter Name="id_venta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="InsertAutorSP">
-            <Parameter Name="nombre" Mode="In" Type="String" />
+          <Parameter Name="nombre" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="InsertClienteSP">
             <Parameter Name="nombre" Mode="In" Type="String" />
@@ -635,31 +669,31 @@
             <Parameter Name="fecha_venta" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="ListAutorByIdSP" ReturnType="Collection(LibraryModel.ListAutorByIdSP_Result)">
-            <Parameter Name="id_autor" Mode="In" Type="Int32" />
+          <Parameter Name="id_autor" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ListAutorSP" ReturnType="Collection(LibraryModel.ListAutorSP_Result)" />
           <FunctionImport Name="ListClienteByIdSP" ReturnType="Collection(LibraryModel.ListClienteByIdSP_Result)">
-            <Parameter Name="id_cliente" Mode="In" Type="Int32" />
+          <Parameter Name="id_cliente" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ListClienteSP" ReturnType="Collection(LibraryModel.ListClienteSP_Result)" />
           <FunctionImport Name="ListCopiaByIdSP" ReturnType="Collection(LibraryModel.ListCopiaByIdSP_Result)">
-            <Parameter Name="id_copia" Mode="In" Type="Int32" />
+          <Parameter Name="id_copia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ListCopiaSP" ReturnType="Collection(LibraryModel.ListCopiaSP_Result)" />
           <FunctionImport Name="ListDetalle_VentaByIdSP" ReturnType="Collection(LibraryModel.ListDetalle_VentaByIdSP_Result)">
-            <Parameter Name="id_detalle" Mode="In" Type="Int32" />
+          <Parameter Name="id_detalle" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ListDetalle_VentaSP" ReturnType="Collection(LibraryModel.ListDetalle_VentaSP_Result)" />
           <FunctionImport Name="ListLibroByIdSP" ReturnType="Collection(LibraryModel.ListLibroByIdSP_Result)">
-            <Parameter Name="id_libro" Mode="In" Type="Int32" />
+          <Parameter Name="id_libro" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ListLibroSP" ReturnType="Collection(LibraryModel.ListLibroSP_Result)" />
           <FunctionImport Name="ListPrestamoByIdSP" ReturnType="Collection(LibraryModel.ListPrestamoByIdSP_Result)">
-            <Parameter Name="id_prestamo" Mode="In" Type="Int32" />
+          <Parameter Name="id_prestamo" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ListPrestamoSP" ReturnType="Collection(LibraryModel.ListPrestamoSP_Result)" />
           <FunctionImport Name="ListVentaByIdSP" ReturnType="Collection(LibraryModel.ListVentaByIdSP_Result)">
-            <Parameter Name="id_venta" Mode="In" Type="Int32" />
+          <Parameter Name="id_venta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ListVentaSP" ReturnType="Collection(LibraryModel.ListVentaSP_Result)" />
           <FunctionImport Name="sp_alterdiagram">
@@ -736,6 +770,12 @@
             <Parameter Name="fecha_venta" Mode="In" Type="DateTime" />
             <Parameter Name="total" Mode="In" Type="Decimal" />
           </FunctionImport>
+          <EntitySet Name="Rols" EntityType="LibraryModel.Rol" />
+          <EntitySet Name="Usuarios" EntityType="LibraryModel.Usuario" />
+          <AssociationSet Name="FK__Usuario__id_rol__3F115E1A" Association="LibraryModel.FK__Usuario__id_rol__3F115E1A">
+            <End Role="Rol" EntitySet="Rols" />
+            <End Role="Usuario" EntitySet="Usuarios" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="ListAutorByIdSP_Result">
           <Property Type="Int32" Name="id_autor" Nullable="false" />
@@ -836,6 +876,37 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="Rol">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Usuarios" Relationship="LibraryModel.FK__Usuario__id_rol__3F115E1A" FromRole="Rol" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_rol" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Rol" Relationship="LibraryModel.FK__Usuario__id_rol__3F115E1A" FromRole="Usuario" ToRole="Rol" />
+        </EntityType>
+        <Association Name="FK__Usuario__id_rol__3F115E1A">
+          <End Type="LibraryModel.Rol" Role="Rol" Multiplicity="1" />
+          <End Type="LibraryModel.Usuario" Role="Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rol">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="id_rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1114,6 +1185,25 @@
           <FunctionImportMapping FunctionImportName="UpdateLibroSP" FunctionName="LibraryModel.Store.UpdateLibroSP" />
           <FunctionImportMapping FunctionImportName="UpdatePrestamoSP" FunctionName="LibraryModel.Store.UpdatePrestamoSP" />
           <FunctionImportMapping FunctionImportName="UpdateVentaSP" FunctionName="LibraryModel.Store.UpdateVentaSP" />
+          <EntitySetMapping Name="Rols">
+            <EntityTypeMapping TypeName="LibraryModel.Rol">
+              <MappingFragment StoreEntitySet="Rol">
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="LibraryModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

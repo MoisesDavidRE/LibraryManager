@@ -1,0 +1,43 @@
+﻿@model Library.ViewModels.LoginViewModel
+
+@{
+    ViewBag.Title = "Iniciar Sesión";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white text-center">
+                <h4 class="mb-0">Acceso al Sistema</h4>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("Login", "Cuenta", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Correo Electrónico</label>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "ejemplo@libreria.com" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Contraseña</label>
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        @Html.CheckBoxFor(m => m.Recordarme, new { @class = "form-check-input" })
+                        <label class="form-check-label">Mantener sesión iniciada</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+                }
+                <button class="btn btn-outline-dark w-100 mb-1" onclick="window.location.href='@Url.Action("Registro", "Cuenta")'">Registrarse</button>
+            </div>
+        </div>
+    </div>
+</div>

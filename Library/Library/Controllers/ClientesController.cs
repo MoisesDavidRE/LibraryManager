@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace Library.Controllers
 {
+    [Authorize]
     public class ClientesController : Controller
     {
         private LibraryEntities db = new LibraryEntities();

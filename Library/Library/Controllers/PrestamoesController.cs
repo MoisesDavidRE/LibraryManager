@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace Library.Controllers
 {
+    [Authorize]
     public class PrestamoesController : Controller
     {
         private LibraryEntities db = new LibraryEntities();

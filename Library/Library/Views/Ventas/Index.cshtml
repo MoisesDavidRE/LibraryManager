@@ -1,45 +1,44 @@
 ﻿@model IEnumerable<Library.Models.Venta>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Ventas";
 }
 
-<h2>Index</h2>
+<div class="container mt-4">
+    <h2 class="text-center mb-4"> Lista de Ventas</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.fecha_venta)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.total)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Cliente.nombre)
-        </th>
-        <th></th>
-    </tr>
+    <p>
+        @Html.ActionLink(" Crear Nueva Venta", "Create", null, new { @class = "btn btn-primary" })
+    </p>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.fecha_venta)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.total)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cliente.nombre)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id_venta }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id_venta }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id_venta })
-        </td>
-    </tr>
-}
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.fecha_venta)</th>
+                <th>@Html.DisplayNameFor(model => model.total)</th>
+                <th>@Html.DisplayNameFor(model => model.Cliente.nombre)</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
 
-</table>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.fecha_venta)</td>
+                    <td>
+                        <span class="fw-bold text-success">
+                            $ @Html.DisplayFor(modelItem => item.total)
+                        </span>
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Cliente.nombre)</td>
+                    <td class="text-center">
+                        @Html.ActionLink("Editar ", "Edit", new { id = item.id_venta }, new { @class = "btn btn-sm btn-warning", title = "Editar" })
+                        @Html.ActionLink("Detalles ", "Details", new { id = item.id_venta }, new { @class = "btn btn-sm btn-info", title = "Detalles" })
+                        @Html.ActionLink("Borrar ", "Delete", new { id = item.id_venta }, new { @class = "btn btn-sm btn-danger", title = "Eliminar" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

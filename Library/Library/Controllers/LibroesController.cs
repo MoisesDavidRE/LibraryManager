@@ -10,6 +10,7 @@ using Library.Models;
 
 namespace Library.Controllers
 {
+    [Authorize]
     public class LibroesController : Controller
     {
         private LibraryEntities db = new LibraryEntities();

@@ -6,6 +6,7 @@ using Library.Models;
 
 namespace Library.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private LibraryEntities db = new LibraryEntities();

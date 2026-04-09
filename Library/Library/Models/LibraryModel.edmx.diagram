@@ -20,6 +20,9 @@
         <AssociationConnector Association="LibraryModel.FK__Detalle_V__id_co__6D0D32F4" ManuallyRouted="false" />
         <AssociationConnector Association="LibraryModel.FK__Prestamo__id_cop__72C60C4A" ManuallyRouted="false" />
         <AssociationConnector Association="LibraryModel.FK__Detalle_V__id_ve__6C190EBB" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="LibraryModel.Rol" Width="1.5" PointX="7.375" PointY="10.25" />
+        <EntityTypeShape EntityType="LibraryModel.Usuario" Width="1.5" PointX="9.625" PointY="9.875" />
+        <AssociationConnector Association="LibraryModel.FK__Usuario__id_rol__3F115E1A" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -35,6 +35,8 @@ namespace Library.Models
         public virtual DbSet<Prestamo> Prestamoes { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Venta> Ventas { get; set; }
+        public virtual DbSet<Rol> Rols { get; set; }
+        public virtual DbSet<Usuario> Usuarios { get; set; }
     
         public virtual int DeleteAutorSP(Nullable<int> id_autor)
         {
