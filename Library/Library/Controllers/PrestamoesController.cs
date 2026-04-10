@@ -16,10 +16,27 @@ namespace Library.Controllers
         private LibraryEntities db = new LibraryEntities();
 
         // GET: Prestamoes
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            var prestamoes = db.Prestamoes.Include(p => p.Cliente).Include(p => p.Copia);
-            return View(prestamoes.ToList());
+            int pageSize = 10;
+
+            var prestamosQuery = db.Prestamoes
+                                   .Include(p => p.Cliente)
+                                   .Include(p => p.Copia)
+                                   .OrderBy(p => p.id_prestamo);
+
+            var prestamoes = prestamosQuery
+                             .Skip((page - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToList();
+
+            int totalRecords = prestamosQuery.Count();
+            int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(prestamoes);
         }
 
         // GET: Prestamoes/Details/5

@@ -12,9 +12,25 @@ namespace Library.Controllers
         private LibraryEntities db = new LibraryEntities();
 
         // GET: Autors
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            return View(db.Autors.ToList());
+            int pageSize = 10;
+
+            var autoresQuery = db.Autors
+                                 .OrderBy(a => a.id_autor);
+
+            var autores = autoresQuery
+                           .Skip((page - 1) * pageSize)
+                           .Take(pageSize)
+                           .ToList();
+
+            int totalRecords = autoresQuery.Count();
+            int totalPages = (int)System.Math.Ceiling((double)totalRecords / pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(autores);
         }
 
         // GET: Autors/Details/5

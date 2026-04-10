@@ -16,11 +16,28 @@ namespace Library.Controllers
         private LibraryEntities db = new LibraryEntities();
 
         // GET: Libroes
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            var libros = db.Libroes.Include(l => l.Autor).ToList();
+            int pageSize = 10;
+
+            var librosQuery = db.Libroes
+                                .Include(l => l.Autor)
+                                .OrderBy(l => l.id_libro);
+
+            var libros = librosQuery
+                         .Skip((page - 1) * pageSize)
+                         .Take(pageSize)
+                         .ToList();
+
+            int totalRecords = librosQuery.Count();
+            int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
             return View(libros);
         }
+
 
         // GET: Libroes/Details/5
         public ActionResult Details(int? id)

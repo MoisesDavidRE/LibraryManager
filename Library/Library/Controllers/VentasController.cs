@@ -15,10 +15,31 @@ namespace Library.Controllers
         private LibraryEntities db = new LibraryEntities();
 
         // GET: Ventas
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            var ventas = db.Ventas.Include(v => v.Cliente);
-            return View(ventas.ToList());
+            int pageSize = 10; // cantidad de registros por página
+
+            var ventasQuery = db.Ventas
+                                .Include(v => v.Cliente)
+                                .OrderBy(v => v.id_venta);
+
+            // Obtener solo los registros de la página actual
+            var ventas = ventasQuery
+                         .Skip((page - 1) * pageSize)
+                         .Take(pageSize)
+                         .ToList();
+
+            // Total de registros
+            int totalRecords = ventasQuery.Count();
+
+            // Total de páginas
+            int totalPages = (int)System.Math.Ceiling((double)totalRecords / pageSize);
+
+            // Enviar datos a la vista
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(ventas);
         }
 
         // GET: Ventas/Details/5

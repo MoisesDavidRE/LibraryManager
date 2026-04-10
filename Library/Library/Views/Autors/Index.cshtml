@@ -24,7 +24,7 @@
                         <td class="align-middle">@item.nombre</td>
                         <td class="text-end">
                             @Html.ActionLink("Editar", "Edit", new { id = item.id_autor }, new { @class = "btn btn-sm btn-primary" })
-                            @Html.ActionLink("Detalles", "Details", new { id = item.id_autor}, new { @class = "btn btn-sm btn-info text-white" })
+                            @Html.ActionLink("Detalles", "Details", new { id = item.id_autor }, new { @class = "btn btn-sm btn-info text-white" })
                             @Html.ActionLink("Eliminar", "Delete", new { id = item.id_autor }, new { @class = "btn btn-sm btn-danger" })
                         </td>
                     </tr>
@@ -32,4 +32,52 @@
             </tbody>
         </table>
     </div>
+    <nav aria-label="Paginación de autores">
+        <ul class="pagination justify-content-center">
+
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    @Html.ActionLink("«", "Index", new { page = ViewBag.CurrentPage - 1 }, new { @class = "page-link" })
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">«</span>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                if (i == ViewBag.CurrentPage)
+                {
+                    <li class="page-item active">
+                        <span class="page-link">@i</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        @Html.ActionLink(i.ToString(), "Index", new { page = i }, new { @class = "page-link" })
+                    </li>
+                }
+            }
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    @Html.ActionLink("»", "Index", new { page = ViewBag.CurrentPage + 1 }, new { @class = "page-link" })
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">»</span>
+                </li>
+            }
+
+        </ul>
+    </nav>
+
 </div>

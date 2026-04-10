@@ -16,10 +16,26 @@ namespace Library.Controllers
         private LibraryEntities db = new LibraryEntities();
 
         // GET: Copias
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            var copias = db.Copias.Include(c => c.Libro);
-            return View(copias.ToList());
+            int pageSize = 10;
+
+            var copiasQuery = db.Copias
+                                .Include(c => c.Libro)
+                                .OrderBy(c => c.id_copia);
+
+            var copias = copiasQuery
+                         .Skip((page - 1) * pageSize)
+                         .Take(pageSize)
+                         .ToList();
+
+            int totalRecords = copiasQuery.Count();
+            int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(copias);
         }
 
         // GET: Copias/Details/5

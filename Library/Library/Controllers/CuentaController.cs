@@ -1,6 +1,8 @@
 ﻿using Library.Models;
+using Library.Services;
 using Library.ViewModels;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -71,7 +73,7 @@ namespace Library.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Registro(RegistroViewModel model)
+        public async Task<ActionResult> Registro(RegistroViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -94,6 +96,15 @@ namespace Library.Controllers
 
             db.Usuarios.Add(nuevoUsuario);
             db.SaveChanges();
+
+            try
+            {
+                ServicioCorreo servicio = new ServicioCorreo();
+                await servicio.EnviarCorreoBienvenidaAsync(nuevoUsuario.email, nuevoUsuario.nombre);
+            }
+            catch
+            {
+            }
 
             return RedirectToAction("Login", "Cuenta");
         }
